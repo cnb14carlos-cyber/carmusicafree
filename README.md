@@ -1,12 +1,27 @@
-# Carmusicfree
+# CarMusicFree
 
-Demo de una plataforma web de música, creada con HTML, CSS y JavaScript sin dependencias. Incluye una interfaz adaptada a móvil, playlists de demostración, búsqueda, favoritos y controles de reproducción simulados.
+App web de musica y radio para el coche.
 
-## Publicarla en GitHub Pages
+## Que incluye
 
-1. Crea un repositorio nuevo en GitHub y sube estos archivos a la rama `main`.
-2. En el repositorio, abre **Settings → Pages**.
-3. En “Build and deployment”, elige **Deploy from a branch** y selecciona `main` y la carpeta `/ (root)`.
-4. Guarda. GitHub mostrará el enlace público de tu web en unos minutos.
+- Buscador online de artistas y canciones.
+- Previews oficiales cuando estan disponibles.
+- Radios espanolas en directo.
+- Artistas y canciones top.
+- Favoritas guardadas en el navegador.
+- Reproductor nativo compatible con movil.
 
-La música y los artistas de esta demo son ficticios. Antes de publicar música real, usa únicamente contenido propio o con licencia para streaming.
+## GitHub Pages
+
+Sube estos archivos a la raiz del repositorio:
+
+- `index.html`
+- `styles.css`
+- `app.js`
+- `server.js`
+- `package.json`
+- `README.md`
+- `metadata.json`
+- `enhancements.css`
+
+No subas `node_modules`.

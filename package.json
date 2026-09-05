@@ -1,15 +1,14 @@
 {
-  "name": "carmusicfree",
-  "version": "1.0.0",
+  "name": "carmusicafree",
+  "version": "3.0.0",
   "private": true,
-  "description": "Demo de una plataforma web de música",
+  "description": "App web de musica y radio para el coche con buscador online, radios espanolas y previews oficiales.",
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "lint": "node --check server.js && node --check app.js",
-    "build": "echo \"Build complete\""
+    "build": "node --check server.js && node --check app.js"
   },
-  "dependencies": {
-    "express": "^4.21.2"
+  "engines": {
+    "node": ">=18"
   }
 }

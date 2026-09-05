@@ -1,346 +1,153 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#07080d" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="description" content="Carmusicfree · Artistas y canciones más tops y radios españolas en directo con reproducción en segundo plano." />
-    <meta property="og:title" content="Carmusicfree · Tu música, tu ruta" />
-    <meta property="og:description" content="Artistas más tops 🔝, canciones más tops 🔝 y radios españolas en directo en segundo plano." />
-    <title>Carmusicfree · Tu música, tu ruta</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090d14" />
+    <meta
+      name="description"
+      content="CarMusicFree: musica, radios espanolas, artistas top y buscador online para escuchar desde el coche."
+    />
+    <title>CarMusicFree</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <!-- Background native audio element for background playback when screen is off (iOS Safari & Android compatible) -->
-    <audio id="nativeAudioPlayer" playsinline webkit-playsinline="true" preload="auto" x-webkit-airplay="allow"></audio>
+    <div class="app">
+      <header class="topbar">
+        <button class="brand" type="button" data-jump="home" aria-label="Ir al inicio">
+          <span class="brand-mark">C</span>
+          <span>
+            <strong>CarMusicFree</strong>
+            <small>Musica y radio</small>
+          </span>
+        </button>
 
-    <!-- YouTube In-App Audio Engine (Plays official YouTube audio inline without opening YouTube app or site) -->
-    <div id="ytAudioEngineContainer" aria-hidden="true" style="position: absolute; width: 1px; height: 1px; top: -9999px; left: -9999px; opacity: 0; pointer-events: none; overflow: hidden;">
-      <div id="ytPlayer"></div>
-    </div>
+        <form class="search" id="searchForm" role="search">
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Busca Shakira, Fito, Dani Martin, LaLion..."
+            aria-label="Buscar canciones, artistas o radios"
+          />
+          <button type="submit">Buscar</button>
+        </form>
 
-    <!-- Ambient glow effect -->
-    <div class="ambient ambient-one" id="ambientOne"></div>
-    <div class="ambient ambient-two" id="ambientTwo"></div>
+        <button class="settings-button" id="settingsButton" type="button">Ajustes</button>
+      </header>
 
-    <!-- Desktop Sidebar -->
-    <aside class="sidebar" id="mainSidebar">
-      <a class="brand" href="#inicio" id="brandLogo" aria-label="Carmusicfree inicio">
-        <span class="brand-mark">C</span>
-        <span>carmusic<span>free</span></span>
-      </a>
-      
-      <nav aria-label="Navegación principal" id="sidebarNav">
-        <button class="nav-link active" id="navInicio" data-view="inicio">
-          <span>⌂</span> <span class="nav-label">Inicio</span>
-        </button>
-        <button class="nav-link" id="navExplorar" data-view="explorar">
-          <span>⌕</span> <span class="nav-label">Explorar</span>
-        </button>
-        <button class="nav-link" id="navRadios" data-view="radios">
-          <span>📻</span> <span class="nav-label">Radios Españolas</span>
-        </button>
-        <button class="nav-link" id="navBiblioteca" data-view="biblioteca">
-          <span>▱</span> <span class="nav-label">Tu biblioteca</span>
-        </button>
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab is-active" type="button" data-jump="home">Inicio</button>
+        <button class="tab" type="button" data-jump="radios">Radios</button>
+        <button class="tab" type="button" data-jump="artists">Artistas top</button>
+        <button class="tab" type="button" data-jump="songs">Canciones top</button>
+        <button class="tab" type="button" data-jump="favorites">Favoritas</button>
       </nav>
 
-      <div class="sidebar-divider"></div>
+      <main>
+        <section class="hero" id="home">
+          <div class="hero-copy">
+            <p class="eyebrow">Buscador online y radios en directo</p>
+            <h1>Musica y radios para escuchar sin lios.</h1>
+            <p>
+              Busca artistas y canciones online. Cuando exista una preview oficial, se reproduce dentro de la web sin anuncios propios de la app.
+            </p>
+            <div class="hero-actions">
+              <button class="primary" id="playTopButton" type="button">Reproducir canciones top</button>
+              <button class="secondary" type="button" data-jump="radios">Ver radios</button>
+            </div>
+          </div>
+          <div class="hero-card">
+            <span class="pulse"></span>
+            <strong>Audio nativo</strong>
+            <small>En movil, pulsa play una vez antes de bloquear la pantalla.</small>
+          </div>
+        </section>
 
-      <button class="sidebar-btn new-playlist" type="button" id="newPlaylist">
-        <span>＋</span> <span class="nav-label">Crear playlist</span>
-      </button>
-      <button class="sidebar-btn liked-link" type="button" id="showLiked">
-        <span>♥</span> <span class="nav-label">Tus favoritas</span>
-      </button>
-      <button class="sidebar-btn radios-sidebar-link" type="button" id="sidebarRadios" data-view="radios">
-        <span>📻</span> <span class="nav-label">Radios en directo</span>
-      </button>
+        <section class="panel results-panel" id="resultsPanel" hidden>
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Resultados</p>
+              <h2 id="resultsTitle">Busqueda</h2>
+            </div>
+            <button class="secondary small" id="clearResults" type="button">Limpiar</button>
+          </div>
+          <p class="status" id="searchStatus"></p>
+          <div class="cards-grid" id="resultsGrid"></div>
+        </section>
 
-      <div class="sidebar-bottom" id="sidebarStatus">
-        <div class="status-badge" id="plusBadgeText">2º Plano Activo</div>
-        <p>Tu música y radios siguen sonando si apagas la pantalla.</p>
+        <section class="panel" id="radios">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">En directo 24/7</p>
+              <h2>Radios espanolas</h2>
+            </div>
+            <button class="secondary small" id="reloadRadios" type="button">Actualizar</button>
+          </div>
+          <div class="cards-grid radio-grid" id="radioGrid"></div>
+        </section>
+
+        <section class="panel" id="artists">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Los mejores artistas</p>
+              <h2>Artistas mas tops</h2>
+            </div>
+          </div>
+          <div class="cards-grid artist-grid" id="artistGrid"></div>
+        </section>
+
+        <section class="panel" id="songs">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Previews oficiales cuando estan disponibles</p>
+              <h2>Canciones mas tops</h2>
+            </div>
+          </div>
+          <div class="song-list" id="songList"></div>
+        </section>
+
+        <section class="panel" id="favorites">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Guardadas en este navegador</p>
+              <h2>Favoritas</h2>
+            </div>
+          </div>
+          <div class="song-list" id="favoritesList"></div>
+        </section>
+      </main>
+    </div>
+
+    <aside class="settings-panel" id="settingsPanel" hidden>
+      <div class="settings-card">
+        <button class="close" id="closeSettings" type="button" aria-label="Cerrar">x</button>
+        <h2>Ajustes</h2>
+        <label>
+          <span>Volumen inicial</span>
+          <input id="defaultVolume" type="range" min="0" max="1" step="0.01" value="0.85" />
+        </label>
+        <p>Los ajustes y favoritas se guardan solo en este navegador.</p>
       </div>
     </aside>
 
-    <!-- Main Content -->
-    <main id="mainContainer">
-      <!-- Topbar Header -->
-      <header class="topbar" id="mainTopbar">
-        <div class="history">
-          <button id="historyBack" aria-label="Volver">‹</button>
-          <button id="historyForward" aria-label="Adelante">›</button>
-        </div>
-
-        <div class="search" id="searchContainer">
-          <span>⌕</span>
-          <input id="search" type="search" placeholder="¿Qué canción, artista o radio buscas?" autocomplete="off" />
-          <div class="search-dropdown" id="searchDropdown"></div>
-        </div>
-
-        <div class="topbar-actions">
-          <div class="bg-mode-badge" id="bgAudioBadge" title="Audio habilitado para sonar en segundo plano con pantalla apagada">
-            <span class="dot"></span> <span>2º Plano Activo</span>
-          </div>
-          <button class="profile" id="profileButton" type="button" aria-label="Ajustes de usuario">
-            <span class="avatar" id="topbarAvatar">C</span>
-            <span id="topbarUserName">Carlos</span>
-            <span class="chevron">⌄</span>
-          </button>
-        </div>
-      </header>
-
-      <!-- Category Filter Chips -->
-      <div class="filter-bar" id="filterBar" role="tablist">
-        <button class="chip active" data-filter="all" id="filterAll">Todo</button>
-        <button class="chip" data-filter="radios" id="filterRadios">📻 Radios Españolas</button>
-        <button class="chip" data-filter="carretera" id="filterCarretera">🚗 Carretera & Viajes</button>
-        <button class="chip" data-filter="urbano" id="filterUrbano">🔥 Urbano & Trap</button>
-        <button class="chip" data-filter="pop" id="filterPop">⚡ Pop & Éxitos</button>
-        <button class="chip" data-filter="synth" id="filterSynth">🌃 Synth & Electrónica</button>
-        <button class="chip" data-filter="rock" id="filterRock">🎸 Rock & Clásicos</button>
-        <button class="chip" data-filter="liked" id="filterLiked">♥ Favoritas</button>
-      </div>
-
-      <!-- Hero Banner -->
-      <section class="hero" id="heroSection">
-        <div class="hero-copy">
-          <p class="eyebrow" id="heroEyebrow">CARMUSICFREE · SEGUNDO PLANO ACTIVADO</p>
-          <h1 id="heroTitle">Música y radios<br /><em>sin interrupciones.</em></h1>
-          <p class="hero-description" id="heroDesc">Canciones más tops, radios españolas en vivo y reproducción continua aunque bloquees o apagues el móvil.</p>
-          <div class="hero-actions">
-            <button class="primary-button" id="heroPlay">
-              <span>▶</span> Reproducir Éxitos Tops
-            </button>
-            <button class="round-button" id="heroRadios" title="Escuchar Radios Españolas">📻</button>
-            <button class="round-button" id="heroLikeAll" title="Añadir a favoritas">♡</button>
-          </div>
-        </div>
-
-        <div class="hero-art" aria-hidden="true">
-          <div class="sun"></div>
-          <div class="mountain far"></div>
-          <div class="mountain near"></div>
-          <div class="road"></div>
-          <div class="car">
-            <div class="car-top"></div>
-            <div class="car-body"></div>
-            <i></i><i></i>
-          </div>
-        </div>
-      </section>
-
-      <!-- Quick Picks / En reproducción rápida -->
-      <section class="content-section quick-picks" id="sectionPicks">
-        <div class="section-heading">
-          <h2 id="headingPicks">Tu selección rápida</h2>
-          <button id="btnRefreshPicks" type="button">Actualizar</button>
-        </div>
-        <div class="pick-grid" id="picks"></div>
-      </section>
-
-      <!-- SECCIÓN RADIOS ESPAÑOLAS (LIVE STREAMING) -->
-      <section class="content-section" id="sectionRadios">
-        <div class="section-heading">
-          <h2 id="headingRadios">Radios españolas 📻</h2>
-          <button id="btnFilterRadiosAll" type="button">En directo 24/7</button>
-        </div>
-        <div class="radios-grid" id="radiosGrid"></div>
-      </section>
-
-      <!-- Featured Real Artists (Artistas más tops 🔝) -->
-      <section class="content-section" id="sectionArtists">
-        <div class="section-heading">
-          <h2 id="headingArtists">Artistas más tops 🔝</h2>
-          <button id="btnFilterArtists" type="button">Ver todos</button>
-        </div>
-        <div class="artists-grid" id="artistsGrid"></div>
-      </section>
-
-      <!-- Road Playlists & Albums -->
-      <section class="content-section" id="sectionPlaylists">
-        <div class="section-heading">
-          <h2 id="headingPlaylists">Playlists destacadas</h2>
-          <button id="btnNewPlaylistHeading" type="button">＋ Nueva lista</button>
-        </div>
-        <div class="card-grid" id="cards"></div>
-      </section>
-
-      <!-- Songs / Tracks Table (Canciones más tops 🔝) -->
-      <section class="content-section tracks-section" id="sectionTracks">
-        <div class="live-drop-alert" id="liveDropAlert" style="display: none;" role="alert">
-          <div class="live-alert-content">
-            <span class="live-alert-badge">🔴 ¡NUEVO ESTRENO!</span>
-            <span id="liveAlertMessage">Un artista acaba de subir una nueva canción.</span>
-          </div>
-          <button class="live-alert-btn" id="btnPlayLiveDrop" type="button">▶ Escuchar ya</button>
-        </div>
-
-        <div class="section-heading tracks-header-wrap">
-          <div>
-            <p class="eyebrow" id="tracksEyebrow">LOS ÉXITOS MÁS ESCUCHADOS & NOVEDADES EN TIEMPO REAL</p>
-            <h2 id="tracksTitle">
-              Canciones más tops 🔝
-              <span class="live-auto-badge" id="liveAutoBadge" title="Las canciones listas que suban los artistas se actualizan solas y salen al instante sin recargar la página">
-                <span class="live-dot-pulse"></span> Auto-actualización en vivo
-              </span>
-            </h2>
-          </div>
-          <div class="tracks-header-actions">
-            <button class="btn-action-play" id="btnPlayAllTracks" type="button">▶ Reproducir</button>
-          </div>
-        </div>
-        <div class="track-list" id="tracks"></div>
-      </section>
-    </main>
-
-    <!-- Mobile Bottom Navigation Bar (Guarantees zero 404s and quick access) -->
-    <nav class="mobile-nav" id="mobileNav" aria-label="Navegación móvil">
-      <button class="mobile-nav-item active" id="mNavInicio" data-view="inicio">
-        <span>⌂</span>
-        <span>Inicio</span>
-      </button>
-      <button class="mobile-nav-item" id="mNavExplorar" data-view="explorar">
-        <span>⌕</span>
-        <span>Explorar</span>
-      </button>
-      <button class="mobile-nav-item" id="mNavRadios" data-view="radios">
-        <span>📻</span>
-        <span>Radios</span>
-      </button>
-      <button class="mobile-nav-item" id="mNavBiblioteca" data-view="biblioteca">
-        <span>▱</span>
-        <span>Biblioteca</span>
-      </button>
-      <button class="mobile-nav-item" id="mNavPerfil" data-action="perfil">
-        <span>⚙</span>
-        <span>Ajustes</span>
-      </button>
-    </nav>
-
-    <!-- Bottom Audio Player -->
-    <footer class="player" id="audioPlayer" aria-label="Reproductor de música">
-      <div class="now-playing" id="nowPlayingBlock">
-        <div class="track-cover small-cover" id="playerCover"></div>
-        <div class="now-playing-info">
-          <strong id="playerTitle">Cargando canción...</strong>
-          <span id="playerArtist">Carmusicfree</span>
-        </div>
-        <button class="heart" id="playerHeart" aria-label="Añadir a favoritas">♡</button>
-      </div>
-
-      <div class="controls" id="playerControls">
-        <div class="control-buttons">
-          <button id="shuffleBtn" aria-label="Modo aleatorio" title="Aleatorio">⌘</button>
-          <button id="prevTrack" aria-label="Canción anterior" title="Anterior">|◀</button>
-          <button class="play-toggle" id="playToggle" aria-label="Reproducir o pausar">▶</button>
-          <button id="nextTrack" aria-label="Siguiente canción" title="Siguiente">▶|</button>
-          <button id="repeatBtn" aria-label="Repetir canción" title="Repetir">↻</button>
-        </div>
-
-        <div class="progress-row">
-          <span id="elapsed">0:00</span>
-          <input id="progress" type="range" min="0" max="100" value="0" aria-label="Progreso de canción" />
-          <span id="duration">3:30</span>
+    <footer class="player" id="player">
+      <img id="playerArt" alt="" />
+      <div class="player-info">
+        <strong id="playerTitle">Elige una cancion o radio</strong>
+        <span id="playerSubtitle">CarMusicFree</span>
+        <div class="progress">
+          <span id="progressBar"></span>
         </div>
       </div>
-
-      <div class="extra-controls" id="extraControls">
-        <button id="muteBtn" title="Silenciar">🔊</button>
-        <input id="volumeSlider" type="range" min="0" max="100" value="75" aria-label="Control de volumen" />
-      </div>
+      <button id="prevButton" type="button">Anterior</button>
+      <button class="play-button" id="playButton" type="button">Play</button>
+      <button id="nextButton" type="button">Siguiente</button>
+      <button id="favButton" type="button">Favorita</button>
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.85" aria-label="Volumen" />
     </footer>
 
-    <!-- User Settings Modal -->
-    <div class="modal-overlay" id="profileModal" aria-modal="true" role="dialog">
-      <div class="modal-box">
-        <button class="modal-close" id="closeProfileModal" type="button">✕</button>
-        
-        <div class="profile-card-header">
-          <div class="profile-avatar-big" id="modalProfileAvatar">C</div>
-          <div class="profile-card-info">
-            <h4 id="modalProfileName">Carlos</h4>
-            <span class="profile-badge" id="modalProfilePlan">Carmusicfree Plus ★</span>
-            <p style="font-size:12px;color:#8e93a6;margin-top:4px;" id="modalProfileEmail">Perfil local guardado en este navegador</p>
-          </div>
-        </div>
-
-        <div class="profile-settings-list">
-          <div class="setting-item">
-            <div class="setting-info">
-              <strong>Reproducción en segundo plano</strong>
-              <span>Sigue sonando si apagas la pantalla o sales de la app</span>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="prefBackgroundPlay" checked />
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <strong>Refuerzo de graves (Bass Boost)</strong>
-              <span>Mejora la pegada y subgraves en altavoces y auriculares</span>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="prefBassBoost" checked />
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <strong>Audio Ultra HD</strong>
-              <span>Streaming sin pérdidas a máxima resolución</span>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="prefUltraHD" checked />
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <div class="profile-actions">
-          <button class="btn-secondary" id="btnEditProfile" type="button">Cambiar nombre</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Create Playlist Modal -->
-    <div class="modal-overlay" id="createPlaylistModal" aria-modal="true" role="dialog">
-      <div class="modal-box">
-        <button class="modal-close" id="closePlaylistModal" type="button">✕</button>
-        <div class="modal-header">
-          <h3>Crear nueva playlist</h3>
-          <p>Personaliza tu colección para la próxima escapada</p>
-        </div>
-
-        <form id="playlistForm">
-          <div class="form-group">
-            <label for="playlistTitle">Nombre de la playlist</label>
-            <input class="form-input" id="playlistTitle" type="text" placeholder="Ej. Mis Éxitos Favoritos" required />
-          </div>
-
-          <div class="form-group">
-            <label for="playlistDesc">Descripción</label>
-            <input class="form-input" id="playlistDesc" type="text" placeholder="Ej. Canciones tops para escuchar" />
-          </div>
-
-          <button class="submit-btn" id="btnSavePlaylist" type="submit">Guardar playlist</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <!-- YouTube IFrame Player API (Enables in-app audio without redirecting to YouTube app) -->
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="app.js"></script>
+    <audio id="audio" preload="none" playsinline webkit-playsinline x-webkit-airplay="allow"></audio>
+    <script src="./app.js" defer></script>
   </body>
 </html>

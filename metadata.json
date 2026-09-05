@@ -1,8 +1,5 @@
 {
-  "name": "Carmusicfree · Tu música, tu ruta",
-  "description": "Tu música y radios españolas en directo con artistas y canciones más tops, reproducción en segundo plano y actualización automática en tiempo real cuando un artista sube un estreno.",
-  "requestFramePermissions": [],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
+  "name": "CarMusicFree",
+  "description": "App web de musica y radio para el coche con buscador online, radios espanolas y previews oficiales.",
+  "runtime": "web"
 }
