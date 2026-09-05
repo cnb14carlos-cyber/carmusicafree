@@ -76,20 +76,15 @@ const el = {
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
   favButton: document.getElementById("favButton"),
-  volume: document.getElementById("volume"),
   settingsButton: document.getElementById("settingsButton"),
   settingsPanel: document.getElementById("settingsPanel"),
-  closeSettings: document.getElementById("closeSettings"),
-  defaultVolume: document.getElementById("defaultVolume")
+  closeSettings: document.getElementById("closeSettings")
 };
 
 init();
 
 function init() {
-  const savedVolume = Number(localStorage.getItem("cmf:volume") || "0.85");
-  el.audio.volume = savedVolume;
-  el.volume.value = String(savedVolume);
-  el.defaultVolume.value = String(savedVolume);
+  el.audio.volume = 0.9;
 
   bindEvents();
   renderArtistCards();
@@ -125,9 +120,6 @@ function bindEvents() {
   el.prevButton.addEventListener("click", playPrevious);
   el.nextButton.addEventListener("click", playNext);
   el.favButton.addEventListener("click", () => toggleFavorite());
-
-  el.volume.addEventListener("input", () => setVolume(el.volume.value));
-  el.defaultVolume.addEventListener("input", () => setVolume(el.defaultVolume.value));
 
   el.settingsButton.addEventListener("click", () => {
     el.settingsPanel.hidden = false;
@@ -578,14 +570,6 @@ function toggleFavorite(item = state.current) {
 
 function renderFavorites() {
   renderSongs(el.favoritesList, state.favorites);
-}
-
-function setVolume(value) {
-  const volume = Number(value);
-  el.audio.volume = volume;
-  el.volume.value = String(volume);
-  el.defaultVolume.value = String(volume);
-  localStorage.setItem("cmf:volume", String(volume));
 }
 
 function isFavorite(item) {

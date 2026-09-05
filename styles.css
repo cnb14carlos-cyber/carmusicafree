@@ -254,7 +254,7 @@ h2 {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 12px;
 }
 
@@ -263,10 +263,12 @@ h2 {
 }
 
 .card {
+  position: relative;
   display: grid;
-  gap: 10px;
+  align-content: end;
   min-height: 100%;
-  padding: 12px;
+  overflow: hidden;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface-2);
@@ -276,10 +278,38 @@ h2 {
 
 .card img {
   width: 100%;
-  aspect-ratio: 1;
-  border-radius: 8px;
+  height: 100%;
+  min-height: 220px;
+  grid-area: 1 / 1;
+  border-radius: 0;
   object-fit: cover;
   background: #0f1520;
+}
+
+.card::after {
+  content: "";
+  grid-area: 1 / 1;
+  background: linear-gradient(180deg, transparent 38%, rgba(4, 8, 13, 0.86) 100%);
+  pointer-events: none;
+}
+
+.card strong,
+.card small {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  align-self: end;
+  padding: 0 14px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+}
+
+.card strong {
+  margin-bottom: 38px;
+  font-size: 1.08rem;
+}
+
+.card small {
+  margin-bottom: 14px;
 }
 
 .card strong,
@@ -302,10 +332,10 @@ h2 {
 
 .song {
   display: grid;
-  grid-template-columns: 56px minmax(0, 1fr) auto auto;
-  gap: 12px;
+  grid-template-columns: 84px minmax(0, 1fr) auto auto;
+  gap: 14px;
   align-items: center;
-  min-height: 78px;
+  min-height: 104px;
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -314,11 +344,16 @@ h2 {
 
 .song img,
 .player img {
-  width: 56px;
-  height: 56px;
+  width: 84px;
+  height: 84px;
   border-radius: 8px;
   object-fit: cover;
   background: #0f1520;
+}
+
+.player img {
+  width: 56px;
+  height: 56px;
 }
 
 .song button {
@@ -338,7 +373,7 @@ h2 {
   z-index: 30;
   transform: translateX(-50%);
   display: grid;
-  grid-template-columns: 56px minmax(160px, 1fr) auto auto auto auto 130px;
+  grid-template-columns: 56px minmax(160px, 1fr) auto auto auto auto;
   gap: 10px;
   align-items: center;
   width: min(1180px, calc(100% - 24px));
@@ -415,17 +450,6 @@ h2 {
   color: var(--text);
 }
 
-label {
-  display: grid;
-  gap: 8px;
-  color: var(--muted);
-  font-weight: 800;
-}
-
-input[type="range"] {
-  accent-color: var(--green);
-}
-
 @media (max-width: 780px) {
   .app {
     width: min(100% - 18px, 1180px);
@@ -460,12 +484,21 @@ input[type="range"] {
     grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
   }
 
+  .card img {
+    min-height: 180px;
+  }
+
   .radio-grid {
     grid-template-columns: 1fr;
   }
 
   .song {
-    grid-template-columns: 50px minmax(0, 1fr) auto;
+    grid-template-columns: 68px minmax(0, 1fr) auto;
+  }
+
+  .song img {
+    width: 68px;
+    height: 68px;
   }
 
   .song .save-inline {
@@ -483,8 +516,7 @@ input[type="range"] {
   }
 
   #prevButton,
-  #nextButton,
-  #volume {
+  #nextButton {
     display: none;
   }
 }
