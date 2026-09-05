@@ -48,7 +48,9 @@ const state = {
   current: null,
   favorites: loadJson("cmf:favorites", []),
   progressTimer: null,
-  loadingId: 0
+  loadingId: 0,
+  stalledTimer: null,
+  topSongsReady: null
 };
 
 const el = {
@@ -92,7 +94,7 @@ function init() {
   bindEvents();
   renderArtistCards();
   renderFavorites();
-  loadTopSongs();
+  state.topSongsReady = loadTopSongs();
   loadRadios();
   updatePlayer(null);
 }
@@ -114,8 +116,8 @@ function bindEvents() {
     el.searchInput.value = "";
   });
 
-  el.playTopButton.addEventListener("click", () => {
-    if (state.queue.length) playItem(state.queue[0], 0);
+  el.playTopButton.addEventListener("click", async () => {
+    await playFirstReadySong();
   });
 
   el.reloadRadios.addEventListener("click", loadRadios);
@@ -146,14 +148,22 @@ function bindEvents() {
     el.playButton.textContent = "Pausa";
     el.playerSubtitle.textContent = subtitleFor(state.current);
     startProgress();
+    watchPlaybackStart();
   });
   el.audio.addEventListener("timeupdate", updateProgress);
   el.audio.addEventListener("loadedmetadata", updateProgress);
+  el.audio.addEventListener("canplay", updateProgress);
+  el.audio.addEventListener("stalled", handleAudioStall);
+  el.audio.addEventListener("waiting", () => {
+    if (!isRadio(state.current)) el.playerSubtitle.textContent = "Cargando un poco mas...";
+  });
   el.audio.addEventListener("ended", playNext);
   el.audio.addEventListener("error", () => {
     el.playButton.textContent = "Play";
-    el.playerSubtitle.textContent = "Ese audio no carga. Prueba otro resultado.";
+    el.playerSubtitle.textContent = "Ese audio no carga. Paso a otro.";
     stopProgress();
+    stopStallWatch();
+    playNextAvailable();
   });
 
   if ("mediaSession" in navigator) {
@@ -210,6 +220,25 @@ async function loadTopSongs() {
   state.queue = songs;
   renderSongs(el.songList, songs);
   hydrateArtistImages(songs);
+}
+
+async function playFirstReadySong() {
+  el.playTopButton.textContent = "Cargando...";
+  try {
+    if (state.topSongsReady) await state.topSongsReady;
+    if (!state.queue.length) {
+      const fallbackSongs = await searchSongs("Pablo Alboran Saturno", 5);
+      state.queue = fallbackSongs;
+      renderSongs(el.songList, state.queue);
+    }
+    if (state.queue.length) {
+      await playItem(state.queue[0], 0);
+    } else {
+      el.playerSubtitle.textContent = "No he encontrado previews reproducibles ahora.";
+    }
+  } finally {
+    el.playTopButton.textContent = "Reproducir canciones top";
+  }
 }
 
 async function loadRadios() {
@@ -394,6 +423,7 @@ async function playItem(item, queueIndex = -1) {
   state.currentIndex = queueIndex;
   updatePlayer(item);
   stopProgress();
+  stopStallWatch();
   el.progressBar.style.width = "0%";
   el.playButton.textContent = "Cargando";
   el.playerSubtitle.textContent = "Cargando audio...";
@@ -410,16 +440,18 @@ async function playItem(item, queueIndex = -1) {
     el.playButton.textContent = "Pausa";
     el.playerSubtitle.textContent = subtitleFor(item);
     startProgress();
+    watchPlaybackStart();
   } catch (error) {
     if (state.loadingId !== loadingId) return;
     el.playButton.textContent = "Play";
-    el.playerSubtitle.textContent = "El navegador bloqueo el audio. Pulsa Play otra vez.";
+    el.playerSubtitle.textContent = "No ha arrancado este audio. Prueba otro o pulsa Play.";
+    playNextAvailable();
   }
 }
 
 function togglePlay() {
   if (!state.current) {
-    if (state.queue.length) playItem(state.queue[0], 0);
+    playFirstReadySong();
     return;
   }
 
@@ -451,6 +483,13 @@ function playNext() {
   if (!state.queue.length) return;
   const index = state.currentIndex >= 0 ? (state.currentIndex + 1) % state.queue.length : 0;
   playItem(state.queue[index], index);
+}
+
+function playNextAvailable() {
+  if (!state.queue.length || state.currentIndex < 0) return;
+  const nextIndex = (state.currentIndex + 1) % state.queue.length;
+  if (nextIndex === state.currentIndex) return;
+  window.setTimeout(() => playItem(state.queue[nextIndex], nextIndex), 600);
 }
 
 function updatePlayer(item) {
@@ -497,6 +536,31 @@ function stopProgress() {
   if (!state.progressTimer) return;
   window.clearInterval(state.progressTimer);
   state.progressTimer = null;
+}
+
+function watchPlaybackStart() {
+  stopStallWatch();
+  if (isRadio(state.current)) return;
+  const startTime = el.audio.currentTime || 0;
+  state.stalledTimer = window.setTimeout(() => {
+    const moved = (el.audio.currentTime || 0) > startTime + 0.5;
+    if (!moved && !el.audio.paused) {
+      el.playerSubtitle.textContent = "Esta preview no avanza. Busco otra.";
+      playNextAvailable();
+    }
+  }, 4500);
+}
+
+function stopStallWatch() {
+  if (!state.stalledTimer) return;
+  window.clearTimeout(state.stalledTimer);
+  state.stalledTimer = null;
+}
+
+function handleAudioStall() {
+  if (isRadio(state.current)) return;
+  el.playerSubtitle.textContent = "La preview se ha parado. Busco otra.";
+  playNextAvailable();
 }
 
 function toggleFavorite(item = state.current) {
