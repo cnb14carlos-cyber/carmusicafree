@@ -1,14 +1,14 @@
 {
   "name": "carmusicafree",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "App web de musica y radio para el coche con buscador online, radios espanolas y previews oficiales.",
+  "type": "module",
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
     "build": "node --check server.js && node --check app.js"
   },
-  "engines": {
-    "node": ">=18"
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }

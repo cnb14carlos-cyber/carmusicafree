@@ -1,64 +1,52 @@
-"use strict";
+import express from "express";
 
-const http = require("http");
-const fs = require("fs");
-const path = require("path");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const PORT = Number(process.env.PORT || 3000);
-const ROOT = __dirname;
+function artwork(url, size = 600) {
+  if (!url) return "";
+  return url.replace(/100x100bb|60x60bb|30x30bb/g, `${size}x${size}bb`);
+}
 
-const types = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css; charset=utf-8",
-  ".js": "application/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8"
-};
+function mapItunes(item) {
+  return {
+    type: "song",
+    title: item.trackName || item.collectionName || "Cancion",
+    artist: item.artistName || "Artista",
+    detail: item.primaryGenreName || "Preview oficial",
+    stream: item.previewUrl || "",
+    cover: artwork(item.artworkUrl100),
+    source: "Apple Music Preview"
+  };
+}
 
-const server = http.createServer(async (req, res) => {
+app.use(express.static("."));
+
+app.get("/api/music/search", async (req, res) => {
+  const q = String(req.query.q || "").trim();
+  const limit = Math.min(Number(req.query.limit || 24), 50);
+
+  if (!q) {
+    res.json({ results: [] });
+    return;
+  }
+
   try {
-    const url = new URL(req.url, `http://${req.headers.host}`);
-
-    if (url.pathname === "/api/music/search") {
-      const q = url.searchParams.get("q") || "";
-      const limit = Math.min(Number(url.searchParams.get("limit") || 12), 25);
-      const results = await searchMusic(q, limit);
-      json(res, 200, { results });
-      return;
-    }
-
-    const requested = url.pathname === "/" ? "/index.html" : url.pathname;
-    const safePath = path.normalize(decodeURIComponent(requested)).replace(/^(\.\.[/\\])+/, "");
-    const filePath = path.join(ROOT, safePath);
-    const finalPath = filePath.startsWith(ROOT) && fs.existsSync(filePath) && fs.statSync(filePath).isFile()
-      ? filePath
-      : path.join(ROOT, "index.html");
-    const ext = path.extname(finalPath);
-    res.writeHead(200, { "content-type": types[ext] || "application/octet-stream" });
-    fs.createReadStream(finalPath).pipe(res);
+    const url = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&media=music&limit=${limit}&country=ES`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`iTunes status ${response.status}`);
+    const data = await response.json();
+    const results = (data.results || []).map(mapItunes).filter((item) => item.stream);
+    res.json({ results });
   } catch (error) {
-    res.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
-    res.end("Error interno");
+    res.status(502).json({ error: "music_search_failed", results: [] });
   }
 });
 
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`CarMusicFree en http://0.0.0.0:${PORT}`);
+app.get("*", (req, res) => {
+  res.sendFile("index.html", { root: process.cwd() });
 });
 
-function json(res, status, payload) {
-  res.writeHead(status, {
-    "content-type": "application/json; charset=utf-8",
-    "cache-control": "no-store",
-    "access-control-allow-origin": "*"
-  });
-  res.end(JSON.stringify(payload));
-}
-
-async function searchMusic(query, limit) {
-  if (!query.trim()) return [];
-  const target = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&entity=song&limit=${limit}&country=ES`;
-  const response = await fetch(target);
-  if (!response.ok) return [];
-  const data = await response.json();
-  return data.results || [];
-}
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`CarMusicaFree escuchando en http://0.0.0.0:${PORT}`);
+});

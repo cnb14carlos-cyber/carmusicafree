@@ -1,27 +1,14 @@
-# CarMusicFree
+# CarMusicaFree
 
-App web de musica y radio para el coche.
+Aplicacion web de musica y radio para el coche.
 
-## Que incluye
+Incluye:
 
-- Buscador online de artistas y canciones.
-- Previews oficiales cuando estan disponibles.
 - Radios espanolas en directo.
-- Artistas y canciones top.
-- Favoritas guardadas en el navegador.
-- Reproductor nativo compatible con movil.
+- Buscador online de artistas y canciones.
+- Previews oficiales sin anuncios propios cuando estan disponibles.
+- Sin inicio de sesion.
+- Reproductor nativo preparado para segundo plano cuando Android, iOS y el navegador lo permiten.
+- Artistas destacados: Fito y Fitipaldis, Dani Martin, Antonio Orozco, Pablo Alboran y mas.
 
-## GitHub Pages
-
-Sube estos archivos a la raiz del repositorio:
-
-- `index.html`
-- `styles.css`
-- `app.js`
-- `server.js`
-- `package.json`
-- `README.md`
-- `metadata.json`
-- `enhancements.css`
-
-No subas `node_modules`.
+Nota importante: ninguna web puede garantizar canciones completas de todos los artistas del mundo sin anuncios usando YouTube normal. Esta version usa fuentes legales con previews oficiales y radios reales.

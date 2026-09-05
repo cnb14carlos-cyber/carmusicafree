@@ -1,139 +1,138 @@
 <!doctype html>
 <html lang="es">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#090d14" />
-    <meta
-      name="description"
-      content="CarMusicFree: musica, radios espanolas, artistas top y buscador online para escuchar desde el coche."
-    />
-    <title>CarMusicFree</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101820">
+    <meta name="description" content="CarMusicaFree: musica, artistas y radios espanolas para escuchar desde el navegador.">
+    <title>CarMusicaFree</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div class="app">
+    <div class="app-shell">
       <header class="topbar">
-        <button class="brand" type="button" data-jump="home" aria-label="Ir al inicio">
-          <span class="brand-mark">C</span>
+        <button class="brand" type="button" data-view="home" aria-label="Ir al inicio">
+          <span class="brand-mark">CM</span>
           <span>
-            <strong>CarMusicFree</strong>
-            <small>Musica y radio</small>
+            <strong>CarMusicaFree</strong>
+            <small>Musica y radio sin login</small>
           </span>
         </button>
-
-        <form class="search" id="searchForm" role="search">
-          <input
-            id="searchInput"
-            type="search"
-            autocomplete="off"
-            placeholder="Busca Shakira, Fito, Dani Martin, LaLion..."
-            aria-label="Buscar canciones, artistas o radios"
-          />
-          <button type="submit">Buscar</button>
-        </form>
-
+        <nav class="desktop-nav" aria-label="Navegacion principal">
+          <button class="nav-link active" type="button" data-view="home">Inicio</button>
+          <button class="nav-link" type="button" data-view="radios">Radios</button>
+          <button class="nav-link" type="button" data-view="artists">Artistas</button>
+          <button class="nav-link" type="button" data-view="songs">Canciones</button>
+          <button class="nav-link" type="button" data-view="credits">Creditos</button>
+        </nav>
       </header>
-
-      <nav class="tabs" aria-label="Secciones">
-        <button class="tab is-active" type="button" data-jump="home">Inicio</button>
-        <button class="tab" type="button" data-jump="radios">Radios</button>
-        <button class="tab" type="button" data-jump="artists">Artistas top</button>
-        <button class="tab" type="button" data-jump="songs">Canciones top</button>
-        <button class="tab" type="button" data-jump="favorites">Favoritas</button>
-      </nav>
 
       <main>
         <section class="hero" id="home">
           <div class="hero-copy">
-            <p class="eyebrow">Buscador online y radios en directo</p>
-            <h1>Musica y radios para escuchar sin lios.</h1>
-            <p>
-              Busca artistas y canciones online. Cuando exista una preview oficial, se reproduce dentro de la web sin anuncios propios de la app.
-            </p>
-            <div class="hero-actions">
-              <button class="primary" id="playTopButton" type="button">Reproducir canciones top</button>
-              <button class="secondary" type="button" data-jump="radios">Ver radios</button>
+            <p class="eyebrow">Reproductor web</p>
+            <h1>Busca artistas, canciones y radios espanolas.</h1>
+            <p>Sin inicio de sesion. Sin anuncios propios. Las canciones usan previews oficiales cuando estan disponibles y las radios se reproducen en directo.</p>
+          </div>
+          <form class="search-panel" id="searchForm">
+            <label for="searchInput">Buscar musica</label>
+            <div class="search-row">
+              <input id="searchInput" type="search" placeholder="Fito y Fitipaldis, Dani Martin, Antonio Orozco..." autocomplete="off">
+              <button type="submit">Buscar</button>
             </div>
-          </div>
-          <div class="hero-card">
-            <span class="pulse"></span>
-            <strong>Audio nativo</strong>
-            <small>En movil, pulsa play una vez antes de bloquear la pantalla.</small>
-          </div>
+            <div class="quick-searches" aria-label="Busquedas rapidas">
+              <button type="button" data-query="Fito y Fitipaldis">Fito y Fitipaldis</button>
+              <button type="button" data-query="Dani Martin">Dani Martin</button>
+              <button type="button" data-query="Antonio Orozco">Antonio Orozco</button>
+              <button type="button" data-query="Pablo Alboran">Pablo Alboran</button>
+            </div>
+          </form>
         </section>
 
-        <section class="panel results-panel" id="resultsPanel" hidden>
-          <div class="section-title">
+        <section class="section" id="searchResultsSection" hidden>
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">Resultados</p>
-              <h2 id="resultsTitle">Busqueda</h2>
+              <p class="eyebrow">Busqueda online</p>
+              <h2>Resultados</h2>
             </div>
-            <button class="secondary small" id="clearResults" type="button">Limpiar</button>
+            <span class="status-pill" id="searchStatus">Listo</span>
           </div>
-          <p class="status" id="searchStatus"></p>
-          <div class="cards-grid" id="resultsGrid"></div>
+          <div class="grid song-grid" id="searchResults"></div>
         </section>
 
-        <section class="panel" id="radios">
-          <div class="section-title">
+        <section class="section" id="radios">
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">En directo 24/7</p>
+              <p class="eyebrow">En directo</p>
               <h2>Radios espanolas</h2>
             </div>
-            <button class="secondary small" id="reloadRadios" type="button">Actualizar</button>
+            <span class="status-pill">Live</span>
           </div>
-          <div class="cards-grid radio-grid" id="radioGrid"></div>
+          <div class="grid radio-grid" id="radioGrid"></div>
         </section>
 
-        <section class="panel" id="artists">
-          <div class="section-title">
+        <section class="section" id="artists">
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">Los mejores artistas</p>
-              <h2>Artistas mas tops</h2>
+              <p class="eyebrow">Seleccionados</p>
+              <h2>Artistas destacados</h2>
             </div>
           </div>
-          <div class="cards-grid artist-grid" id="artistGrid"></div>
+          <div class="grid artist-grid" id="artistGrid"></div>
         </section>
 
-        <section class="panel" id="songs">
-          <div class="section-title">
+        <section class="section" id="songs">
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">Previews oficiales cuando estan disponibles</p>
+              <p class="eyebrow">Top buscables</p>
               <h2>Canciones mas tops</h2>
             </div>
           </div>
-          <div class="song-list" id="songList"></div>
+          <div class="grid song-grid" id="topSongs"></div>
         </section>
 
-        <section class="panel" id="favorites">
-          <div class="section-title">
+        <section class="section credits-section" id="credits">
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">Guardadas en este navegador</p>
-              <h2>Favoritas</h2>
+              <p class="eyebrow">Proyecto</p>
+              <h2>Creditos</h2>
             </div>
           </div>
-          <div class="song-list" id="favoritesList"></div>
+          <div class="credits-card">
+            <h3>CarMusicaFree</h3>
+            <p>Creado para Carlos. App web para escuchar radios espanolas y descubrir musica desde el navegador.</p>
+            <ul>
+              <li>Radios: emisiones online de sus cadenas.</li>
+              <li>Canciones: busqueda legal con previews oficiales sin anuncios propios.</li>
+              <li>Artistas: destacados editables y busqueda mundial online.</li>
+              <li>Segundo plano: usa audio nativo del navegador; depende de Android, iOS y permisos del navegador.</li>
+            </ul>
+          </div>
         </section>
       </main>
     </div>
 
-    <footer class="player" id="player">
-      <img id="playerArt" alt="" />
+    <footer class="player" id="player" aria-live="polite">
+      <img id="playerCover" src="" alt="" class="player-cover">
       <div class="player-info">
-        <strong id="playerTitle">Elige una cancion o radio</strong>
-        <span id="playerSubtitle">CarMusicFree</span>
-        <div class="progress">
+        <strong id="playerTitle">Elige una radio o cancion</strong>
+        <span id="playerArtist">Listo para reproducir</span>
+        <div class="progress-track" aria-label="Progreso">
           <span id="progressBar"></span>
         </div>
       </div>
-      <button id="prevButton" type="button">Anterior</button>
-      <button class="play-button" id="playButton" type="button">Play</button>
-      <button id="nextButton" type="button">Siguiente</button>
-      <button id="favButton" type="button">Favorita</button>
+      <button class="play-button" type="button" id="playPauseButton" aria-label="Reproducir o pausar">Play</button>
     </footer>
 
-    <audio id="audio" preload="none" playsinline webkit-playsinline x-webkit-airplay="allow"></audio>
-    <script src="./app.js" defer></script>
+    <nav class="mobile-nav" aria-label="Navegacion movil">
+      <button class="mobile-link active" type="button" data-view="home">Inicio</button>
+      <button class="mobile-link" type="button" data-view="radios">Radios</button>
+      <button class="mobile-link" type="button" data-view="artists">Artistas</button>
+      <button class="mobile-link" type="button" data-view="songs">Top</button>
+      <button class="mobile-link" type="button" data-view="credits">Creditos</button>
+    </nav>
+
+    <audio id="audioPlayer" preload="none" playsinline webkit-playsinline crossorigin="anonymous"></audio>
+    <script src="app.js"></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 {
-  "name": "CarMusicFree",
-  "description": "App web de musica y radio para el coche con buscador online, radios espanolas y previews oficiales.",
-  "runtime": "web"
+  "title": "CarMusicaFree",
+  "description": "App web de musica y radio para el coche, con radios espanolas, buscador online y previews oficiales sin anuncios propios.",
+  "runtime": "web-node",
+  "port": 3000
 }
