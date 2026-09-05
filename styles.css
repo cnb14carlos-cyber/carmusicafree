@@ -60,7 +60,6 @@ button {
 }
 
 .brand,
-.settings-button,
 .tab,
 .primary,
 .secondary,
@@ -128,7 +127,6 @@ button {
   padding: 0 16px;
 }
 
-.settings-button,
 .secondary,
 .player button {
   padding: 0 14px;
@@ -320,8 +318,7 @@ h2 {
 
 .card small,
 .song small,
-.player-info span,
-.settings-card p {
+.player-info span {
   color: var(--muted);
 }
 
@@ -415,39 +412,6 @@ h2 {
 .play-button {
   background: var(--green) !important;
   color: #06110b !important;
-}
-
-.settings-panel {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.62);
-}
-
-.settings-card {
-  position: relative;
-  display: grid;
-  gap: 16px;
-  width: min(430px, 100%);
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-}
-
-.close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface-2);
-  color: var(--text);
 }
 
 @media (max-width: 780px) {

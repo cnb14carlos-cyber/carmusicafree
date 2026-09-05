@@ -75,17 +75,12 @@ const el = {
   playButton: document.getElementById("playButton"),
   prevButton: document.getElementById("prevButton"),
   nextButton: document.getElementById("nextButton"),
-  favButton: document.getElementById("favButton"),
-  settingsButton: document.getElementById("settingsButton"),
-  settingsPanel: document.getElementById("settingsPanel"),
-  closeSettings: document.getElementById("closeSettings")
+  favButton: document.getElementById("favButton")
 };
 
 init();
 
 function init() {
-  el.audio.volume = 0.9;
-
   bindEvents();
   renderArtistCards();
   renderFavorites();
@@ -120,13 +115,6 @@ function bindEvents() {
   el.prevButton.addEventListener("click", playPrevious);
   el.nextButton.addEventListener("click", playNext);
   el.favButton.addEventListener("click", () => toggleFavorite());
-
-  el.settingsButton.addEventListener("click", () => {
-    el.settingsPanel.hidden = false;
-  });
-  el.closeSettings.addEventListener("click", () => {
-    el.settingsPanel.hidden = true;
-  });
 
   el.audio.addEventListener("play", () => {
     el.playButton.textContent = "Pausa";
