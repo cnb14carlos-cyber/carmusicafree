@@ -374,23 +374,11 @@ let isRepeat = false;
 let currentVolume = 0.75;
 let isMuted = false;
 
-const GUEST_ACCOUNT = {
-  name: 'Invitado',
-  email: '',
-  avatar: 'I',
-  plan: 'Cuenta gratis',
-  loggedIn: false,
-  backgroundPlay: true,
-  bassBoost: false,
-  ultraHD: false
-};
-
 const DEFAULT_ACCOUNT = {
   name: 'Carlos',
-  email: 'carlos@carmusicfree.com',
+  email: '',
   avatar: 'C',
   plan: 'Carmusicfree Plus ★',
-  loggedIn: true,
   backgroundPlay: true,
   bassBoost: true,
   ultraHD: true
@@ -407,22 +395,15 @@ function loadJson(key, fallback) {
 
 function normalizeAccount(account) {
   return {
-    ...GUEST_ACCOUNT,
+    ...DEFAULT_ACCOUNT,
     ...account,
-    avatar: account?.avatar || account?.name?.charAt(0)?.toUpperCase() || 'I',
-    loggedIn: !!account?.loggedIn
+    avatar: account?.avatar || account?.name?.charAt(0)?.toUpperCase() || 'C'
   };
 }
 
 function saveUserAccount(account) {
   userAccount = normalizeAccount(account);
   localStorage.setItem('carmusicfree_user', JSON.stringify(userAccount));
-
-  if (userAccount.loggedIn && userAccount.email) {
-    const accounts = loadJson('carmusicfree_accounts', {});
-    accounts[userAccount.email.toLowerCase()] = userAccount;
-    localStorage.setItem('carmusicfree_accounts', JSON.stringify(accounts));
-  }
 }
 
 // Local Persistence
@@ -1647,14 +1628,14 @@ function showToast(msg) {
 // User Account UI
 function updateUserUI() {
   const account = normalizeAccount(userAccount);
-  const displayName = account.loggedIn ? account.name : 'Entrar';
+  const displayName = account.name || 'Carlos';
   const displayAvatar = account.avatar || displayName.charAt(0).toUpperCase();
 
   $('#topbarUserName').textContent = displayName;
   $('#topbarAvatar').textContent = displayAvatar;
   $('#modalProfileAvatar').textContent = displayAvatar;
   $('#modalProfileName').textContent = account.name;
-  $('#modalProfileEmail').textContent = account.email || 'Sin cuenta iniciada';
+  $('#modalProfileEmail').textContent = 'Perfil local guardado en este navegador';
   $('#modalProfilePlan').textContent = account.plan;
 
   if ($('#prefBassBoost')) $('#prefBassBoost').checked = !!account.bassBoost;
@@ -1663,11 +1644,7 @@ function updateUserUI() {
 }
 
 function openAccountPanel() {
-  if (userAccount.loggedIn) {
-    openModal('#profileModal');
-  } else {
-    openModal('#authModal');
-  }
+  openModal('#profileModal');
 }
 
 function openModal(modalId) {
@@ -1921,91 +1898,7 @@ function initEvents() {
   $('#profileButton').onclick = openAccountPanel;
 
   $('#closeProfileModal').onclick = () => closeModal('#profileModal');
-  $('#closeAuthModal').onclick = () => closeModal('#authModal');
   $('#closePlaylistModal').onclick = () => closeModal('#createPlaylistModal');
-
-  $('#tabLogin').onclick = () => {
-    $('#tabLogin').classList.add('active');
-    $('#tabRegister').classList.remove('active');
-    $('#groupName').style.display = 'none';
-    $('#btnSubmitAuth').textContent = 'Entrar';
-    $('#authModalTitle').textContent = 'Bienvenido a Carmusicfree';
-  };
-
-  $('#tabRegister').onclick = () => {
-    $('#tabRegister').classList.add('active');
-    $('#tabLogin').classList.remove('active');
-    $('#groupName').style.display = 'block';
-    $('#btnSubmitAuth').textContent = 'Crear cuenta Plus';
-    $('#authModalTitle').textContent = 'Crea tu cuenta gratis';
-  };
-
-  $('#btnQuickDemoLogin').onclick = () => {
-    saveUserAccount({
-      name: 'Carlos',
-      email: 'carlos@carmusicfree.com',
-      avatar: 'C',
-      plan: 'Carmusicfree Plus ★',
-      loggedIn: true,
-      backgroundPlay: true,
-      bassBoost: true,
-      ultraHD: true
-    });
-    updateUserUI();
-    closeModal('#authModal');
-    showToast('Sesión iniciada: Carlos (Carmusicfree Plus)');
-  };
-
-  $('#authForm').onsubmit = (e) => {
-    e.preventDefault();
-    const email = $('#inputAuthEmail').value.trim();
-    const password = $('#inputAuthPassword').value.trim();
-    const isRegister = $('#tabRegister').classList.contains('active');
-    const accounts = loadJson('carmusicfree_accounts', {});
-    const storedAccount = accounts[email.toLowerCase()];
-
-    if (!email || !password) {
-      showToast('Escribe correo y contraseña');
-      return;
-    }
-
-    if (!isRegister && storedAccount) {
-      saveUserAccount({
-        ...storedAccount,
-        loggedIn: true
-      });
-      updateUserUI();
-      closeModal('#authModal');
-      showToast(`Sesión iniciada: ${userAccount.name}`);
-      return;
-    }
-
-    const name = ($('#inputAuthName').value || storedAccount?.name || email.split('@')[0]).trim();
-    saveUserAccount({
-      ...(storedAccount || {}),
-      name,
-      email: email,
-      avatar: name.charAt(0).toUpperCase(),
-      plan: 'Carmusicfree Plus ★',
-      loggedIn: true,
-      backgroundPlay: storedAccount?.backgroundPlay ?? true,
-      bassBoost: storedAccount?.bassBoost ?? true,
-      ultraHD: storedAccount?.ultraHD ?? true
-    });
-    updateUserUI();
-    closeModal('#authModal');
-    showToast(isRegister ? `Cuenta guardada: ${name}` : `Sesión iniciada: ${name}`);
-  };
-
-  $('#btnLogout').onclick = () => {
-    saveUserAccount({
-      ...GUEST_ACCOUNT,
-      backgroundPlay: userAccount.backgroundPlay
-    });
-    updateUserUI();
-    closeModal('#profileModal');
-    showToast('Sesión cerrada correctamente');
-  };
 
   $('#btnEditProfile').onclick = () => {
     const newName = prompt('Introduce tu nuevo nombre de usuario:', userAccount.name);

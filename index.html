@@ -87,7 +87,7 @@
           <div class="bg-mode-badge" id="bgAudioBadge" title="Audio habilitado para sonar en segundo plano con pantalla apagada">
             <span class="dot"></span> <span>2º Plano Activo</span>
           </div>
-          <button class="profile" id="profileButton" type="button" aria-label="Cuenta de usuario">
+          <button class="profile" id="profileButton" type="button" aria-label="Ajustes de usuario">
             <span class="avatar" id="topbarAvatar">C</span>
             <span id="topbarUserName">Carlos</span>
             <span class="chevron">⌄</span>
@@ -218,8 +218,8 @@
         <span>Biblioteca</span>
       </button>
       <button class="mobile-nav-item" id="mNavPerfil" data-action="perfil">
-        <span>👤</span>
-        <span>Cuenta</span>
+        <span>⚙</span>
+        <span>Ajustes</span>
       </button>
     </nav>
 
@@ -256,46 +256,7 @@
       </div>
     </footer>
 
-    <!-- Auth Modal (Iniciar Sesión / Registro) -->
-    <div class="modal-overlay" id="authModal" aria-modal="true" role="dialog">
-      <div class="modal-box">
-        <button class="modal-close" id="closeAuthModal" type="button">✕</button>
-        <div class="modal-header">
-          <h3 id="authModalTitle">Bienvenido a Carmusicfree</h3>
-          <p id="authModalSubtitle">Guarda tus canciones, playlists y preferencias para la ruta</p>
-        </div>
-
-        <div class="modal-tabs">
-          <button class="modal-tab active" id="tabLogin" type="button">Iniciar sesión</button>
-          <button class="modal-tab" id="tabRegister" type="button">Crear cuenta</button>
-        </div>
-
-        <form id="authForm">
-          <div class="form-group" id="groupName" style="display: none;">
-            <label for="inputAuthName">Tu nombre</label>
-            <input class="form-input" id="inputAuthName" type="text" placeholder="Ej. Carlos" />
-          </div>
-
-          <div class="form-group">
-            <label for="inputAuthEmail">Correo electrónico</label>
-            <input class="form-input" id="inputAuthEmail" type="email" placeholder="carlos@ejemplo.com" required />
-          </div>
-
-          <div class="form-group">
-            <label for="inputAuthPassword">Contraseña</label>
-            <input class="form-input" id="inputAuthPassword" type="password" placeholder="••••••••" required />
-          </div>
-
-          <button class="submit-btn" id="btnSubmitAuth" type="submit">Entrar</button>
-        </form>
-
-        <button class="demo-account-btn" id="btnQuickDemoLogin" type="button">
-          ⚡ Entrar como Carlos (Cuenta Demo Plus)
-        </button>
-      </div>
-    </div>
-
-    <!-- User Profile Modal -->
+    <!-- User Settings Modal -->
     <div class="modal-overlay" id="profileModal" aria-modal="true" role="dialog">
       <div class="modal-box">
         <button class="modal-close" id="closeProfileModal" type="button">✕</button>
@@ -305,7 +266,7 @@
           <div class="profile-card-info">
             <h4 id="modalProfileName">Carlos</h4>
             <span class="profile-badge" id="modalProfilePlan">Carmusicfree Plus ★</span>
-            <p style="font-size:12px;color:#8e93a6;margin-top:4px;" id="modalProfileEmail">carlos@carmusicfree.com</p>
+            <p style="font-size:12px;color:#8e93a6;margin-top:4px;" id="modalProfileEmail">Perfil local guardado en este navegador</p>
           </div>
         </div>
 
@@ -346,7 +307,6 @@
 
         <div class="profile-actions">
           <button class="btn-secondary" id="btnEditProfile" type="button">Cambiar nombre</button>
-          <button class="btn-danger" id="btnLogout" type="button">Cerrar sesión</button>
         </div>
       </div>
     </div>
