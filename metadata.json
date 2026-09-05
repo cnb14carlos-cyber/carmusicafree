@@ -1,0 +1,6 @@
+{
+  "name": "CarMusicFree",
+  "description": "App web de musica y radio para el coche con buscador mundial, artistas top, canciones populares y emisoras espanolas.",
+  "runtime": "web-node",
+  "port": 3000
+}

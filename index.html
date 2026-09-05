@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0f17" />
+    <meta
+      name="description"
+      content="CarMusicFree: musica, artistas y radios espanolas en una app web optimizada para movil, tablet y navegador."
+    />
+    <meta name="y:title" content="CarMusicFree" />
+    <meta
+      name="y:description"
+      content="App web de musica y radio para el coche con buscador mundial, artistas top, canciones populares y emisoras espanolas."
+    />
+    <title>CarMusicFree</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="brand" type="button" data-route="home" aria-label="Inicio">
+          <span class="brand-mark">CMF</span>
+          <span>
+            <strong>CarMusicFree</strong>
+            <small>Musica y radio en el coche</small>
+          </span>
+        </button>
+
+        <form class="search" id="searchForm" role="search">
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Busca artistas, canciones o radios..."
+            aria-label="Buscar musica"
+          />
+          <button type="submit" aria-label="Buscar">Buscar</button>
+        </form>
+
+        <button class="account-chip" id="accountButton" type="button">
+          <span class="avatar">C</span>
+          <span>Carlos</span>
+        </button>
+      </header>
+
+      <nav class="tabs" aria-label="Secciones">
+        <button class="tab is-active" type="button" data-route="home">Inicio</button>
+        <button class="tab" type="button" data-route="radios">Radios</button>
+        <button class="tab" type="button" data-route="artists">Artistas top</button>
+        <button class="tab" type="button" data-route="songs">Canciones top</button>
+        <button class="tab" type="button" data-route="library">Favoritas</button>
+      </nav>
+
+      <main>
+        <section class="hero panel" data-section="home">
+          <div>
+            <p class="eyebrow">Buscador mundial y radios en directo</p>
+            <h1>Busca artistas, canciones y emisoras sin salir de la web.</h1>
+            <p>
+              La app consulta fuentes musicales online y muestra resultados reales con portada. Las canciones reproducen previews oficiales sin anuncios cuando la fuente los ofrece.
+            </p>
+          </div>
+          <div class="now-card">
+            <span class="live-dot"></span>
+            <strong>Segundo plano</strong>
+            <small>Las radios usan audio nativo. En movil, pulsa play una vez antes de bloquear la pantalla.</small>
+          </div>
+        </section>
+
+        <section class="panel search-results" id="resultsPanel" hidden>
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Resultados</p>
+              <h2 id="resultsTitle">Busqueda</h2>
+            </div>
+            <button class="ghost" id="clearResults" type="button">Limpiar</button>
+          </div>
+          <div class="status" id="searchStatus"></div>
+          <div class="grid results-grid" id="resultsGrid"></div>
+        </section>
+
+        <section class="panel" data-section="radios">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">En directo</p>
+              <h2>Radios espanolas</h2>
+            </div>
+            <button class="ghost" id="refreshRadios" type="button">Actualizar</button>
+          </div>
+          <div class="grid radio-grid" id="radioGrid"></div>
+        </section>
+
+        <section class="panel" data-section="artists">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Los mejores artistas</p>
+              <h2>Artistas mas tops</h2>
+            </div>
+          </div>
+          <div class="grid artist-grid" id="artistGrid"></div>
+        </section>
+
+        <section class="panel" data-section="songs">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Canciones populares</p>
+              <h2>Canciones mas tops</h2>
+            </div>
+            <button class="primary" id="playTopSongs" type="button">Reproducir</button>
+          </div>
+          <div class="song-list" id="topSongs"></div>
+        </section>
+
+        <section class="panel" data-section="library">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Tu biblioteca</p>
+              <h2>Favoritas</h2>
+            </div>
+          </div>
+          <div class="song-list" id="favoritesList"></div>
+        </section>
+      </main>
+
+      <aside class="account-panel" id="accountPanel" hidden>
+        <div class="account-card">
+          <button class="close" id="closeAccount" type="button" aria-label="Cerrar">x</button>
+          <div class="profile">
+            <span class="profile-avatar">C</span>
+            <div>
+              <h2>Carlos</h2>
+              <p>Cuenta demo local</p>
+            </div>
+          </div>
+          <label>
+            Nombre
+            <input id="profileName" type="text" value="Carlos" />
+          </label>
+          <button class="primary" id="saveProfile" type="button">Guardar cuenta</button>
+          <p class="fineprint">Esta cuenta se guarda solo en este navegador.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="player" id="player">
+      <img id="playerArt" alt="" />
+      <div class="player-meta">
+        <strong id="playerTitle">Elige una cancion o radio</strong>
+        <span id="playerArtist">CarMusicFree</span>
+        <div class="progress">
+          <span id="progressBar"></span>
+        </div>
+      </div>
+      <button id="prevButton" type="button" aria-label="Anterior">Prev</button>
+      <button class="play" id="playButton" type="button" aria-label="Reproducir">Play</button>
+      <button id="nextButton" type="button" aria-label="Siguiente">Next</button>
+      <button id="favoriteButton" type="button" aria-label="Favorita">Fav</button>
+      <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.85" aria-label="Volumen" />
+    </footer>
+
+    <audio id="audio" preload="none" playsinline webkit-playsinline x-webkit-airplay="allow"></audio>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
