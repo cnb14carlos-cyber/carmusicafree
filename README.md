@@ -1,32 +1,12 @@
-# CarMusicFree
+# Carmusicfree
 
-App web de musica y radio para el coche, con buscador online de artistas y canciones, artistas destacados, canciones populares y emisoras espanolas en directo.
+Demo de una plataforma web de música, creada con HTML, CSS y JavaScript sin dependencias. Incluye una interfaz adaptada a móvil, playlists de demostración, búsqueda, favoritos y controles de reproducción simulados.
 
-## Archivos que hay que subir
+## Publicarla en GitHub Pages
 
-Sube o reemplaza estos archivos en GitHub, AI Studio o tu proyecto:
+1. Crea un repositorio nuevo en GitHub y sube estos archivos a la rama `main`.
+2. En el repositorio, abre **Settings → Pages**.
+3. En “Build and deployment”, elige **Deploy from a branch** y selecciona `main` y la carpeta `/ (root)`.
+4. Guarda. GitHub mostrará el enlace público de tu web en unos minutos.
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `server.js`
-- `package.json`
-- `package-lock.json`
-- `README.md`
-- `metadata.json`
-
-No subas `node_modules`.
-
-## Musica, artistas y anuncios
-
-El buscador consulta fuentes musicales online como Apple Music/iTunes y Deezer. No guarda "todos los artistas del mundo" dentro del proyecto: los busca en internet cuando escribes en el buscador.
-
-Las canciones se reproducen como previews oficiales sin anuncios cuando la fuente los ofrece. No incluye codigo para quitar anuncios de YouTube ni para saltarse sus condiciones.
-
-## Ejecutar localmente
-
-```bash
-npm start
-```
-
-Abre `http://localhost:3000`.
+La música y los artistas de esta demo son ficticios. Antes de publicar música real, usa únicamente contenido propio o con licencia para streaming.
